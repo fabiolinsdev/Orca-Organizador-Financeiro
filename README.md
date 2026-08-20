@@ -1,6 +1,6 @@
 # Orça — Organizador Financeiro
 
-Aplicação em monorepo com **Next.js (App Router) + TypeScript** no frontend e **Node.js + Fastify + PostgreSQL + Prisma** no backend.
+Um organizador financeiro, para auxiliar nos gastos e ajudar no controle do que esta entrando de saldo e saindo, marcando o que foi gasto e com o que foi gasto, atualizando toda vez que for consumido saldo.. feito com **Next.js (App Router) + TypeScript** no frontend e **Node.js + Fastify + PostgreSQL + Prisma** no backend.
 
 ## Regras de negócio
 
