@@ -1,0 +1,151 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-08-12T00:00:00.000Z",
+  "__export_source": "orca-organizador-financeiro",
+  "resources": [
+    {
+      "_id": "wrk_orca",
+      "parentId": null,
+      "modified": 0,
+      "created": 0,
+      "name": "Orça API",
+      "description": "Coleção Fastify do Organizador Financeiro",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_orca",
+      "parentId": "wrk_orca",
+      "modified": 0,
+      "created": 0,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:3333",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbXNyd2o1c2kwMDAzMTZubzhzNWo5Y3h1IiwiZW1haWwiOiJ0ZXN0ZSsxNzg2NjQ4NzQzNzA3QGV4YW1wbGUuY29tIiwiaWF0IjoxNzg2NjQ4NzQzfQ.0n3MBQKdCZ8ejf7Oxk5Vo9jjQhML3_gM9IbIPS7OwVU"
+      },
+      "_type": "environment"
+    },
+    {
+      "_id": "fld_auth",
+      "parentId": "wrk_orca",
+      "modified": 0,
+      "created": 0,
+      "name": "Autenticação",
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_health",
+      "parentId": "wrk_orca",
+      "modified": 0,
+      "created": 0,
+      "url": "{{ base_url }}/health",
+      "name": "Healthcheck",
+      "method": "GET",
+      "headers": [],
+      "parameters": [],
+      "_type": "request"
+    },
+    {
+      "_id": "req_register",
+      "parentId": "fld_auth",
+      "modified": 0,
+      "created": 0,
+      "url": "{{ base_url }}/auth/register",
+      "name": "Criar conta",
+      "method": "POST",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Maria Silva\",\n  \"email\": \"maria@example.com\",\n  \"password\": \"Orca@2026\",\n  \"acceptedTerms\": true\n}"
+      },
+      "_type": "request"
+    },
+    {
+      "_id": "req_login",
+      "parentId": "fld_auth",
+      "modified": 0,
+      "created": 0,
+      "url": "{{ base_url }}/auth/login",
+      "name": "Login",
+      "method": "POST",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"maria@example.com\",\n  \"password\": \"Orca@2026\"\n}"
+      },
+      "_type": "request"
+    },
+    {
+      "_id": "req_recovery",
+      "parentId": "fld_auth",
+      "modified": 0,
+      "created": 0,
+      "url": "{{ base_url }}/auth/recovery",
+      "name": "Recuperar senha",
+      "method": "POST",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"email\":\"maria@example.com\"}"
+      },
+      "_type": "request"
+    },
+    {
+      "_id": "req_transactions",
+      "parentId": "wrk_orca",
+      "modified": 0,
+      "created": 0,
+      "url": "{{ base_url }}/transactions",
+      "name": "Listar movimentações",
+      "method": "GET",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ],
+      "parameters": [],
+      "_type": "request"
+    },
+    {
+      "_id": "req_transaction_create",
+      "parentId": "wrk_orca",
+      "modified": 0,
+      "created": 0,
+      "url": "{{ base_url }}/transactions",
+      "name": "Criar movimentação",
+      "method": "POST",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"description\": \"Salário\",\n  \"amount\": 5000,\n  \"type\": \"INCOME\",\n  \"category\": \"Trabalho\",\n  \"transactionDate\": \"2026-08-12\"\n}"
+      },
+      "_type": "request"
+    }
+  ]
+}

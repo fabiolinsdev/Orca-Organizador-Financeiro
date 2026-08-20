@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ORÇA - Static Preview</title>
+  <style>
+/* Copied from apps/web/app/globals.css (trimmed) */
+:root{--p:#25103e;--g:#176d59;--red:#af3243;--muted:#746b7d}
+*{box-sizing:border-box}body{margin:0;background:#f5f2f7;color:#211b29;font-family:Arial,sans-serif}
+button,input,select{font:inherit}button{border:0;border-radius:8px;min-height:44px;padding:0 16px;background:var(--g);color:#fff;font-weight:700;cursor:pointer}
+.hell{min-height:100vh;max-width:1250px;margin:auto;display:grid;grid-template-columns:0.9fr 1.1fr;background:#fff}
+.shell{min-height:100vh;max-width:1250px;margin:auto;display:grid;grid-template-columns:0.9fr 1.1fr;background:#eaf6ff}
+.shell aside{padding:55px 9%;display:flex;flex-direction:column;justify-content:space-between;color:#fff;background:radial-gradient(circle at 0 90%,#176d59,transparent 30%),linear-gradient(145deg,#13061f,var(--p),#381651)}
+.logo{font-size:1.5rem;font-weight:700}.auth,.dashboard{padding:55px max(30px,8%);align-content:center}
+.aside-note{margin-top:18px;color:rgba(255,255,255,0.9);opacity:0.95;font-size:0.95rem}
+form{display:grid;gap:15px;max-width:500px}label{display:grid;gap:6px;font-size:.9rem;font-weight:700}input,select{height:46px;border:1px solid #e7e1ea;border-radius:8px;padding:0 12px}.password{position:relative}
+.password input{width:100%;padding-right:48px}.password button{position:absolute;right:3px;top:2px;background:transparent;color:var(--p);padding:0;min-height:40px}.terms{display:block;font-weight:400}.link{background:transparent;color:var(--g);padding:0}
+.link.highlight{color:#0b66ff;font-weight:700;text-decoration:underline}
+.error{color:var(--red);min-height:20px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0}
+.cards article{padding:18px;background:#f7f5f8;border-radius:12px;color:var(--muted)}.list{display:grid;gap:14px;margin-top:22px}.item{display:grid;grid-template-columns:1.7fr 1fr auto;align-items:center;gap:12px;padding:12px 14px;border:1px solid #ece5ef;border-radius:12px;background:#faf7fa}
+.green{color:var(--g)!important}.red{color:var(--red)!important}.danger{color:var(--red)!important}
+  </style>
+</head>
+<body>
+  <main id="app" class="shell">
+    <aside>
+      <div>
+        <div class="logo">ORÇA</div>
+        <h1>Organize suas finanças com clareza.</h1>
+        <p>Acompanhe receitas, despesas, saldo e metas em uma interface simples.</p>
+        <p class="aside-note">Sauadim, seu sistema orçamentario</p>
+      </div>
+    </aside>
+    <div id="root-react" class="auth">
+      <b>CONTROLE</b>
+      <h2>Carregando...</h2>
+    </div>
+  </main>
+
+  <!-- React + TypeScript via CDN. No installs required. -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Load precompiled runtime file (no Babel) -->
+  <script src="/app.jsx"></script>

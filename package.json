@@ -1,0 +1,22 @@
+{
+  "name": "orca-organizador-financeiro",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "start": "node scripts/start_all.js",
+    "dev": "concurrently \"npm run dev --workspace=@orca/api\" \"npm run dev --workspace=@orca/web\"",
+    "test": "npm run test --workspace=@orca/api",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "db:migrate": "npm run prisma:migrate --workspace=@orca/api",
+    "db:generate": "npm run prisma:generate --workspace=@orca/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "@prisma/engines-version": "https://registry.npmjs.org/@prisma/engines-version/-/engines-version-5.22.0-44.605197351a3c8bdd595af2d2a9bc3025bca48ea2.tgz"
+  }
+}
