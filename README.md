@@ -1,18 +1,16 @@
 # Orça — Organizador Financeiro
 
-Um projeto pessoal feito para aprender, testar ideias e construir algo útil para controlar finanças no dia a dia. A ideia aqui é simples: registrar entradas e saídas, acompanhar o saldo e deixar o processo de organização financeira mais claro.
-
-Eu criei esse projeto como uma forma de praticar backend, autenticação, banco de dados, API REST e também um pouco de front-end em Next.js. É um projeto de estudo, com foco em aprender na prática e deixar as coisas funcionando de verdade.
+Um organizador financeiro para controlar entradas, saídas, saldo e despesas do dia a dia.
 
 ## O que o projeto faz
 
 - cadastro e login de usuários
 - autenticação com JWT
 - criptografia de senha com bcrypt
-- criação, listagem e exclusão de receitas/despesas
+- criação, listagem e exclusão de receitas e despesas
 - cálculo de saldo e movimentações por usuário
 - API REST com Fastify
-- front-end em Next.js
+- interface em Next.js
 
 ## Stack
 
@@ -104,43 +102,3 @@ O frontend em:
 - `GET /transactions`
 - `POST /transactions`
 - `DELETE /transactions/:id`
-
-## Segurança
-
-Esse projeto foi ajustado para evitar um problema sério de autenticação com JWT.
-
-Antes, a aplicação usava um segredo fraco e opcional, o que permitia que um token pudesse ser forjado caso o valor padrão fosse usado. Agora:
-
-- a aplicação exige um `JWT_SECRET` com pelo menos 32 caracteres
-- o token é gerado e validado usando o plugin oficial do Fastify para JWT
-- a sessão expira em 12 horas
-- as rotas protegidas validam o token antes de liberar acesso
-
-Isso deixa o processo de autenticação bem mais seguro e mais próximo do que seria usado em um projeto real.
-
-## Dicas de estudo
-
-Esse projeto foi pensado para servir como base de aprendizado em:
-
-- arquitetura de APIs REST
-- autenticação e autorização
-- uso de banco de dados com Prisma
-- validação de dados com Zod
-- estrutura de monorepo com apps separados
-- segurança em aplicações web
-
-Se você está começando, vale a pena estudar cada camada separadamente:
-
-1. API e rotas
-2. banco de dados e Prisma
-3. autenticação e JWT
-4. frontend e integração com a API
-5. boas práticas de segurança
-
-## Observação
-
-Este é um projeto de estudo, então o foco está em aprender na prática e melhorar a qualidade do código ao longo do tempo. Qualquer sugestão, melhoria ou correção é bem-vinda.
-
-## Autor
-
-Fábio Lins
