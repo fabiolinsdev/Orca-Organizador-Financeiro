@@ -1,11 +1,21 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
-import crypto from 'crypto';
 import bcrypt from 'bcrypt';
+import jwt from '@fastify/jwt';
 import { PrismaClient, TransactionType } from '@prisma/client';
 import { z } from 'zod';
 
 const prisma = new PrismaClient();
+
+const getJwtSecret = () => {
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret || secret.length < 32) {
+    throw new Error('JWT_SECRET deve existir e conter pelo menos 32 caracteres.');
+  }
+
+  return secret;
+};
 
 const passwordSchema = z
   .string()
@@ -34,52 +44,20 @@ export const buildApp = async () => {
     origin: process.env.WEB_ORIGIN || 'http://localhost:3000',
   });
 
-  const JWT_SECRET = process.env.JWT_SECRET || 'troque-esta-chave-em-producao';
-
-  const base64url = (input: string) =>
-    Buffer.from(input)
-      .toString('base64')
-      .replace(/=+$/g, '')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_');
-
-  const signJwt = (payload: Record<string, any>) => {
-    const header = { alg: 'HS256', typ: 'JWT' };
-    const body = { ...payload, iat: Math.floor(Date.now() / 1000) };
-    const unsigned = `${base64url(JSON.stringify(header))}.${base64url(JSON.stringify(body))}`;
-    const signature = crypto
-      .createHmac('sha256', JWT_SECRET)
-      .update(unsigned)
-      .digest('base64')
-      .replace(/=+$/g, '')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_');
-    return `${unsigned}.${signature}`;
-  };
-
-  const verifyJwt = (token: string) => {
-    const parts = token.split('.');
-    if (parts.length !== 3) throw new Error('Invalid token');
-    const [headerB64, payloadB64, sig] = parts;
-    const unsigned = `${headerB64}.${payloadB64}`;
-    const expected = crypto
-      .createHmac('sha256', JWT_SECRET)
-      .update(unsigned)
-      .digest('base64')
-      .replace(/=+$/g, '')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_');
-    if (expected !== sig) throw new Error('Invalid signature');
-    const payload = JSON.parse(Buffer.from(payloadB64, 'base64').toString('utf-8'));
-    return payload;
-  };
+  await app.register(jwt, {
+    secret: getJwtSecret(),
+  });
 
   app.decorate('authenticate', async (request: any, reply: any) => {
     try {
       const auth = (request.headers?.authorization || '').toString();
-      const token = auth.startsWith('Bearer ') ? auth.slice(7) : auth;
-      if (!token) throw new Error('No token');
-      const payload = verifyJwt(token);
+      const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
+
+      if (!token) {
+        throw new Error('No token');
+      }
+
+      const payload = await request.jwtVerify();
       request.user = { sub: payload.sub, email: payload.email };
     } catch {
       return reply.code(401).send({ error: 'Sessão inválida ou expirada.' });
@@ -97,7 +75,6 @@ export const buildApp = async () => {
     email: u.email,
   });
 
-  // GET
   app.get('/health', async () => ({
     status: 'ok',
     service: 'orca-api',
@@ -112,7 +89,6 @@ export const buildApp = async () => {
     })
   );
 
-  // POST
   app.post('/auth/register', async (request, reply) => {
     const schema = z.object({
       name: z.string().min(2),
@@ -136,7 +112,10 @@ export const buildApp = async () => {
         },
       });
 
-      const token = signJwt({ sub: user.id, email: user.email });
+      const token = await app.jwt.sign(
+        { sub: user.id, email: user.email },
+        { expiresIn: '12h' },
+      );
 
       return reply.code(201).send({
         user: publicUser(user),
@@ -207,7 +186,7 @@ export const buildApp = async () => {
 
     return {
       user: publicUser(user),
-      token: signJwt({ sub: user.id, email: user.email }),
+      token: await app.jwt.sign({ sub: user.id, email: user.email }, { expiresIn: '12h' }),
     };
   });
 
@@ -252,8 +231,7 @@ export const buildApp = async () => {
     return reply.code(201).send(transaction);
   });
 
-  // DELETE
-    app.delete('/transactions/:id', {
+  app.delete('/transactions/:id', {
     preHandler: (app as any).authenticate,
   }, async (request: any, reply) => {
     const item = await prisma.transaction.findFirst({
@@ -271,7 +249,6 @@ export const buildApp = async () => {
     return reply.code(204).send();
   });
 
-  // DEBUG: mostrar todas as rotas registradas
   await app.ready();
 
   console.log('========== ROTAS REGISTRADAS ==========');
