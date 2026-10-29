@@ -102,3 +102,5 @@ O frontend em:
 - `GET /transactions`
 - `POST /transactions`
 - `DELETE /transactions/:id`
+
+Este projeto foi pensado como uma aplicação prática para aprender e consolidar conceitos de desenvolvimento full stack. Eu usei Node.js, Fastify, Prisma e Next.js para montar uma solução simples, funcional e próxima do que um sistema real de controle financeiro precisa. O foco está em organizar entradas e saídas, manter o saldo em dia e praticar autenticação, validação e integração entre frontend e backend de forma realista.
